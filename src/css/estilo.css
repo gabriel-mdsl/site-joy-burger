@@ -1,0 +1,55 @@
+ @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+    }
+
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .whatsapp-pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .logo-container {
+      width: 120px;
+      height: 120px;
+      background: #d32f2f;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .product-img {
+      height: 160px;
+      width: 100%;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }

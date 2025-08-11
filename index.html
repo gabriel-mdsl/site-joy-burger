@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joy Burger - Delivery</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .gradient-bg {
+      background: linear-gradient(135deg, #dc2626, #ea580c);
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .pulse-animation {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    .cart-badge {
+      animation: bounce 0.5s ease-in-out;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    .logo {
+      background-color: #dc1c24;
+      border: solid;
+    }
+
+    @media(max-width: 450px) {
+      .menu {
+        flex-wrap: wrap;
+      }
+
+      .rodape .paragrafo {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-orange-50">
+  <!-- Header -->
+  <header class="gradient-bg text-white text-center py-8 relative overflow-hidden">
+    <div class="absolute inset-0 bg-black opacity-10"></div>
+    <div class="relative z-10">
+      <div class="w-32 h-32 mx-auto mb-4 rounded-full flex items-center justify-center shadow-lg logo">
+        <!-- <span class="text-6xl">🍔</span> -->
+         <img src="src/imagens/logo.png" alt="">
+      </div>
+      <h1 class="text-4xl font-bold mb-2">Joy Burger</h1>
+      <p class="text-xl mb-1">Delivery Premium</p>
+      <p class="text-orange-200">📍 Santa Luzia do Paruá - Maranhão | CEP 65272-000</p>
+      
+      <!-- Status de funcionamento -->
+      <div id="status-funcionamento" class="mt-4 p-3 rounded-lg mx-4 font-bold text-lg">
+        <!-- Status será inserido aqui pelo JavaScript -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="bg-red-800 py-3 sticky top-0 z-50 shadow-lg">
+    <div class="flex justify-center gap-8 menu">
+      <a href="#cardapio" class="text-white font-semibold hover:text-orange-200 transition-colors px-2 py-2 rounded">🍔 Cardápio</a>
+      <a href="https://www.instagram.com/joyburger17" target="_blank" class="text-white font-semibold hover:text-orange-200 transition-colors px-2 py-2 rounded">📱 Instagram</a>
+      <a href="#contato" class="text-white font-semibold hover:text-orange-200 transition-colors px-2 py-2 rounded">📞 Contato</a>
+      <button onclick="toggleCart()" class="text-white font-semibold hover:text-orange-200 transition-colors px-2 py-2 rounded relative">
+        🛒 Carrinho
+        <span id="cart-count" class="absolute -top-2 -right-2 bg-orange-500 text-white rounded-full w-6 h-6 text-sm flex items-center justify-center hidden cart-badge">0</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Menu Section -->
+  <section id="cardapio" class="py-12 px-4">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-8 text-red-800">🍔 Nosso Cardápio</h2>
+
+      <!-- Category Tabs -->
+      <div class="flex justify-center mb-8 flex-wrap gap-2">
+        <button onclick="showCategory('hamburgueres')" id="tab-hamburgueres" class="category-tab bg-red-600 text-white px-6 py-2 rounded-full font-semibold transition-colors">
+          🍔 Hambúrgueres
+        </button>
+        <button onclick="showCategory('hotdogs')" id="tab-hotdogs" class="category-tab bg-gray-300 text-gray-700 px-6 py-2 rounded-full font-semibold transition-colors hover:bg-red-600 hover:text-white">
+          🌭 Hot Dogs
+        </button>
+        <button onclick="showCategory('massas')" id="tab-massas" class="category-tab bg-gray-300 text-gray-700 px-6 py-2 rounded-full font-semibold transition-colors hover:bg-red-600 hover:text-white">
+          🍝 Massas
+        </button>
+        <button onclick="showCategory('bebidas')" id="tab-bebidas" class="category-tab bg-gray-300 text-gray-700 px-6 py-2 rounded-full font-semibold transition-colors hover:bg-red-600 hover:text-white">
+          🥤 Bebidas
+        </button>
+        <button onclick="showCategory('adicionais')" id="tab-adicionais" class="category-tab bg-gray-300 text-gray-700 px-6 py-2 rounded-full font-semibold transition-colors hover:bg-red-600 hover:text-white">
+          🍟 Adicionais
+        </button>
+        <button onclick="showCategory('molhos')" id="tab-molhos" class="category-tab bg-gray-300 text-gray-700 px-6 py-2 rounded-full font-semibold transition-colors hover:bg-red-600 hover:text-white">
+          🥫 Molhos
+        </button>
+      </div>
+
+      <!-- Products Grid -->
+      <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Products will be rendered here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Cart Modal -->
+  <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-red-800">🛒 Seu Carrinho</h3>
+          <button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+        </div>
+        <div id="cart-items" class="space-y-3">
+          <!-- Cart items will be rendered here -->
+        </div>
+        <div class="border-t pt-4 mt-4">
+          <div class="flex justify-between items-center mb-4">
+            <span class="font-bold text-lg">Total: R$ <span id="cart-total">0,00</span></span>
+          </div>
+          
+          <!-- Customer Information Form -->
+          <div class="space-y-3 mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">👤 Nome completo</label>
+              <input type="text" id="customer-name" placeholder="Digite seu nome" 
+                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">📱 Telefone/WhatsApp</label>
+              <input type="tel" id="customer-phone" placeholder="(98) 99999-9999" 
+                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">🚚 Tipo de entrega</label>
+              <select id="delivery-type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                <option value="">Selecione o tipo de entrega</option>
+                <option value="entrega">🏠 Entrega em casa</option>
+                <option value="retirada">🏪 Retirada no local</option>
+              </select>
+            </div>
+            
+            <div id="address-section">
+              <label class="block text-sm font-medium text-gray-700 mb-1">📍 Endereço completo</label>
+              <textarea id="customer-address" placeholder="Rua, número, bairro, ponto de referência..." 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 h-20 resize-none"></textarea>
+              
+              <!-- Informações de entrega -->
+              <div class="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <div class="text-center">
+                  <div class="text-blue-700 font-semibold mb-2">🚚 Informações de Entrega</div>
+                  <div class="space-y-1 text-sm text-blue-600">
+                    <div>💰 Taxa de entrega: <span class="font-semibold">R$ 5,00</span></div>
+                    <div>⏱️ Tempo estimado: <span class="font-semibold">30-45 min</span></div>
+                    <div class="text-xs text-gray-500 mt-2">
+                      Taxa fixa para toda Santa Luzia do Paruá
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div id="pickup-location" class="hidden">
+              <label class="block text-sm font-medium text-gray-700 mb-2">🏪 Local para retirada</label>
+              <div class="w-full p-0 border-4 border-red-500 rounded-2xl bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 shadow-2xl overflow-hidden">
+                <!-- Header com logo -->
+                <div class="bg-gradient-to-r from-red-600 to-red-700 p-4 text-center">
+                  <div class="flex items-center justify-center mb-2">
+                    <span class="text-4xl mr-3 animate-bounce">🍔</span>
+                    <h4 class="font-black text-2xl text-white tracking-wide">JOY BURGER</h4>
+                  </div>
+                  <p class="text-red-100 text-sm font-medium">🏪 RETIRADA NO LOCAL</p>
+                </div>
+                
+                <!-- Informações do endereço -->
+                <div class="p-5 bg-white mx-3 my-4 rounded-xl shadow-lg border-2 border-red-200">
+                  <div class="space-y-3">
+                    <div class="flex items-center p-2 bg-red-50 rounded-lg">
+                      <span class="text-2xl mr-3">📍</span>
+                      <div>
+                        <p class="font-bold text-lg text-red-800">Rua do cordeiro, 54</p>
+                        <p class="text-sm text-gray-600">Endereço principal</p>
+                      </div>
+                    </div>
+                    
+                    <div class="flex items-center p-2 bg-blue-50 rounded-lg">
+                      <span class="text-2xl mr-3">🏙️</span>
+                      <div>
+                        <p class="font-bold text-lg text-blue-800">Santa Luzia do Paruá - MA</p>
+                        <p class="text-sm text-gray-600">Cidade e estado</p>
+                      </div>
+                    </div>
+                    
+                    <div class="flex items-center p-2 bg-green-50 rounded-lg">
+                      <span class="text-2xl mr-3">📮</span>
+                      <div>
+                        <p class="font-bold text-lg text-green-800">CEP: 65272-000</p>
+                        <p class="text-sm text-gray-600">Código postal</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Horário de funcionamento -->
+                <div class="bg-gradient-to-r from-red-600 to-red-700 p-4 text-center">
+                  <div class="bg-white bg-opacity-20 rounded-lg p-3">
+                    <p class="font-black text-xl text-white mb-1">🕐 FUNCIONAMENTO</p>
+                    <p class="font-bold text-2xl text-yellow-300">19h às 23h</p>
+                    <div class="mt-2 p-2 bg-yellow-400 rounded-lg">
+                      <p class="text-sm font-bold text-red-800">⚠️ RETIRE SEU PEDIDO NO HORÁRIO!</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">📝 Observações</label>
+              <textarea id="customer-notes" placeholder="Alguma observação especial? (opcional)" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 h-16 resize-none"></textarea>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">💳 Forma de pagamento</label>
+              <select id="payment-method" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                <option value="">Selecione a forma de pagamento</option>
+                <option value="dinheiro">💵 Dinheiro</option>
+                <option value="pix">📱 PIX</option>
+                <option value="cartao-debito">💳 Cartão de Débito</option>
+                <option value="cartao-credito">💳 Cartão de Crédito</option>
+              </select>
+            </div>
+            
+            <div id="troco-section" class="hidden">
+              <label class="block text-sm font-medium text-gray-700 mb-1">💰 Troco para quanto?</label>
+              <input type="number" id="troco-value" placeholder="Ex: 50.00" step="0.01" min="0"
+                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+          </div>
+          
+          <div id="total-section" class="space-y-2 mb-4">
+            <div class="flex justify-between text-lg">
+              <span>Subtotal:</span>
+              <span>R$ <span id="cart-subtotal">0,00</span></span>
+            </div>
+            <div id="delivery-fee-section" class="flex justify-between text-sm text-gray-600 hidden">
+              <span>Taxa de entrega:</span>
+              <span>R$ <span id="cart-delivery-fee">0,00</span></span>
+            </div>
+            <div class="flex justify-between font-bold text-xl border-t pt-2">
+              <span>Total:</span>
+              <span class="text-green-600">R$ <span id="cart-final-total">0,00</span></span>
+            </div>
+          </div>
+          
+          <button id="finalize-button" onclick="finalizarPedido()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+            📱 Finalizar no WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <section id="contato" class="bg-red-800 text-white py-12 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-6">📞 Entre em Contato</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-red-700 p-6 rounded-lg">
+          <h3 class="text-xl font-semibold mb-3">📱 WhatsApp</h3>
+          <p class="mb-3">Faça seu pedido pelo WhatsApp:</p>
+          <a href="https://wa.me/+5598991038276" target="_blank" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors inline-block">
+            Chamar no WhatsApp
+          </a>
+        </div>
+        <div class="bg-red-700 p-6 rounded-lg">
+          <h3 class="text-xl font-semibold mb-3">📍 Localização</h3>
+          <p class="mb-2">Santa Luzia do Paruá - MA</p>
+          <p class="mb-2">CEP: 65272-000</p>
+          <p class="text-orange-200">🕐 Funcionamento: 19h às 23h</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white text-center py-6 rodape">
+    <p>&copy; 2025 Joy Burger - Todos os direitos reservados</p>
+    <p class="text-gray-400 mt-2 paragrafo">Desenvolvido com ❤️ para Santa Luzia do Paruá</p>
+  </footer>
+
+  <script>
+    // Product data
+    const produtos = {
+      hamburgueres: [
+        { nome: "GOLD SMASH", preco: 15.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO, QUEIJO CHEDDAR.", imagem: "src/imagens/gold-smash.jpg" },
+        { nome: "JOY CARAMELIZADA", preco: 19.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO, QUEIJO MUSSARELA, CEBOLA CARAMELIZADA.", imagem: "src/imagens/joy-caramelizada.jpg" },
+        { nome: "JOY BACON", preco: 19.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO, QUEIJO CHEDDAR, BACON.", imagem: "src/imagens/joy-bacon.jpg" },
+        { nome: "JOY SALAD", preco: 19.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO, QUEIJO MUSSARELA, ALFACE AMERICANA, E TOMATE, CEBOLA ROXA GRELHADA.", imagem: "src/imagens/joy-salad.jpg" },
+        { nome: "JOY CALABRESA", preco: 19.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO,, QUEIJO CHEDDAR, CALABRESA.", imagem: "src/imagens/joy-calabresa.jpg" },
+        { nome: "KING SMASH", preco: 27.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, DOID BLENDS, QUEIJO CHEDDAR, CEBOLA ROXA GRELHADA, BACON.", imagem: "src/imagens/king-smash.jpg" }
+      ],
+      hotdogs: [
+        { nome: "HOT SIMPLES", preco: 16.00, descricao: "PÃO, SALSICHA GRELHADA, MOLHO À BOLONHESA, BATATA PALHA.", imagem: "src/imagens/hot-dog.png" },
+        { nome: "HOT GOLD", preco: 20.00, descricao: "PÃO DE LEITE, DUAS SALSICHAS GRELHADAS, MOLHO À BOLONHESA, MOLHO CHEDDAR, BACON.", imagem: "src/imagens/hot-gold.jpg" },
+        { nome: "HOT CARAMELIZADA", preco: 20.00, descricao: "PÃO DE LEITE, DUAS SALSICHAS GRELHADAS, MOLHO À BOLONHESA, CEBOLA CARAMELIZADA, BATALHA PALHA.", imagem: "src/imagens/hot-dog.png" },
+        { nome: "HOT ONION", preco: 20.00, descricao: "PÃO DE LEITE,  DUAS SALSICHAS, MOLHO À BOLONHESA, CEBOLA ROXA GRELHADA, MAIONESE DE ALHO.", imagem: "src/imagens/hot-onion.jpg" },
+        { nome: "HOT CALABRESA", preco: 20.00, descricao: "PÃO DE LEITE, DUAS SALSICHAS GRELHADAS, MOLHO À BOLONHESA,, CALABRESA, BATATA PALHA.", imagem: "src/imagens/hot-dog.png" }
+      ],
+      massas: [
+        { nome: "MASSA SIMPLES", preco: 20.00, descricao: "MACARRÃO TALHARIM, MOLHO À BOLONHESA, QUEIJO MUSSARELA, SALSICHA GRELHADA.", imagem: "src/imagens/massa.jpg" },
+        { nome: "MASSA BACON", preco: 20.00, descricao: "MACARRÃO TALHARIM, MOLHO À BOLONHESA, QUEIJO MUSSARELA, BACON.", imagem: "src/imagens/massa.jpg" },
+        { nome: "MASSA CALABRESA", preco: 20.00, descricao: "MACARRÃO TALHARIM, MOLHO À BOLONHESA, QUEIJO MUSSARELA, CALABRESA.", imagem: "src/imagens/massa.jpg" }
+      ],
+      bebidas: [
+        { nome: "REFRIGERANTE LATA", preco: 5.00, descricao: "350ML, CONSULTAR SABORES", imagem: "src/imagens/refrigerante-350ml.png" },
+        { nome: "SUCO 300ML", preco: 6.00, descricao: "CONSULTAR SABORES", imagem: "src/imagens/suco.png" }
+      ],
+      adicionais: [
+        { nome: "CARNE", preco: 6.00, descricao: "", imagem: "src/imagens/carne.png" },
+        { nome: "BACON", preco: 5.00, descricao: "", imagem: "src/imagens/bacon.png" },
+        { nome: "CALABRESA", preco: 5.00, descricao: "", imagem: "src/imagens/calabresa.png" },
+        { nome: "SALSICHA", preco: 2.00, descricao: "", imagem: "src/imagens/salsicha-grelhada.png" },
+        { nome: "CEBOLA CARAMELIZADA", preco: 5.00, descricao: "", imagem: "src/imagens/cebola-caramelizada.png" },
+        { nome: "QUEIJO", preco: 2.00, descricao: "", imagem: "src/imagens/queijo-fatiado.png" },
+        { nome: "OVO", preco: 2.00, descricao: "", imagem: "src/imagens/ovo-frito.png" }
+      ],
+      molhos: [
+        { nome: "MAIONESE DE ALHO", preco: 2.00, descricao: "", imagem: "src/imagens/maionese-de-alho-copo.png" },
+        { nome: "BARBECUE", preco: 2.00, descricao: "", imagem: "src/imagens/barbecue.png" },
+        { nome: "GELÉIA DE PIMENTA", preco: 3.00, descricao: "", imagem: "src/imagens/geleia-de-pimenta.png" }
+      ]
+    };
+
+    // Cart functionality
+    let cart = [];
+    let currentCategory = 'hamburgueres';
+    let deliveryFee = 0;
+    
+    // Configurações do restaurante
+    const RESTAURANT_CONFIG = {
+      // Horários de funcionamento (24h format)
+      horarios: {
+        abertura: 19, // 19h
+        fechamento: 23, // 23h
+        diasFuncionamento: [0, 1, 2, 3, 4, 5, 6] // 0=domingo, 1=segunda, etc. (todos os dias)
+      },
+      
+      // Localização do restaurante (Santa Luzia do Paruá - MA)
+      localizacao: {
+        lat: -2.8419, // Coordenadas aproximadas
+        lng: -45.2419,
+        endereco: "Santa Luzia do Paruá - MA"
+      },
+      
+      // Configurações de entrega
+      entrega: {
+        taxaFixa: 5.00, // R$ taxa fixa
+        tempoEstimado: '30-45 min' // tempo estimado
+      }
+    };
+
+    // Funções do sistema de horários
+    function verificarFuncionamento() {
+      const agora = new Date();
+      const horaAtual = agora.getHours();
+      const diaAtual = agora.getDay();
+      const minutosAtual = agora.getMinutes();
+      
+      const { abertura, fechamento, diasFuncionamento } = RESTAURANT_CONFIG.horarios;
+      
+      // Verifica se hoje é dia de funcionamento
+      if (!diasFuncionamento.includes(diaAtual)) {
+        return {
+          aberto: false,
+          status: 'fechado-dia',
+          mensagem: '🔴 FECHADO HOJE',
+          detalhes: 'Voltamos amanhã às 19h'
+        };
+      }
+      
+      // Verifica horário
+      const estaAberto = horaAtual >= abertura && horaAtual < fechamento;
+      
+      if (estaAberto) {
+        // Calcular tempo restante
+        const minutosRestantes = (fechamento - horaAtual - 1) * 60 + (60 - minutosAtual);
+        const horasRestantes = Math.floor(minutosRestantes / 60);
+        const minutosRestantesFinal = minutosRestantes % 60;
+        
+        let tempoRestante = '';
+        if (horasRestantes > 0) {
+          tempoRestante = `${horasRestantes}h${minutosRestantesFinal > 0 ? minutosRestantesFinal + 'min' : ''}`;
+        } else {
+          tempoRestante = `${minutosRestantesFinal}min`;
+        }
+        
+        // Aviso se está perto de fechar
+        if (minutosRestantes <= 30) {
+          return {
+            aberto: true,
+            status: 'fechando-breve',
+            mensagem: '⚠️ FECHAMOS EM BREVE',
+            detalhes: `Restam apenas ${tempoRestante}!`
+          };
+        }
+        
+        return {
+          aberto: true,
+          status: 'aberto',
+          mensagem: '🟢 ABERTO',
+          detalhes: `Fechamos às ${fechamento}h (restam ${tempoRestante})`
+        };
+      } else {
+        // Calcular quando abre
+        let proximaAbertura;
+        if (horaAtual < abertura) {
+          // Ainda hoje
+          const minutosAteAbrir = (abertura - horaAtual - 1) * 60 + (60 - minutosAtual);
+          const horasAteAbrir = Math.floor(minutosAteAbrir / 60);
+          const minutosFinais = minutosAteAbrir % 60;
+          proximaAbertura = `em ${horasAteAbrir}h${minutosFinais > 0 ? minutosFinais + 'min' : ''}`;
+        } else {
+          // Amanhã
+          proximaAbertura = `amanhã às ${abertura}h`;
+        }
+        
+        return {
+          aberto: false,
+          status: 'fechado',
+          mensagem: '🔴 FECHADO',
+          detalhes: `Abrimos ${proximaAbertura}`
+        };
+      }
+    }
+    
+    function atualizarStatusFuncionamento() {
+      const status = verificarFuncionamento();
+      const elemento = document.getElementById('status-funcionamento');
+      
+      // Definir classes CSS baseadas no status
+      elemento.className = 'mt-4 p-3 rounded-lg mx-4 font-bold text-lg';
+      
+      switch (status.status) {
+        case 'aberto':
+          elemento.classList.add('bg-green-500', 'text-white');
+          break;
+        case 'fechando-breve':
+          elemento.classList.add('bg-yellow-500', 'text-black');
+          break;
+        case 'fechado':
+        case 'fechado-dia':
+          elemento.classList.add('bg-red-500', 'text-white');
+          break;
+      }
+      
+      elemento.innerHTML = `
+        <div>${status.mensagem}</div>
+        <div class="text-sm font-normal opacity-90">${status.detalhes}</div>
+      `;
+      
+      // Desabilitar pedidos se fechado
+      const botaoFinalizar = document.getElementById('finalize-button');
+      if (!status.aberto) {
+        botaoFinalizar.disabled = true;
+        botaoFinalizar.classList.add('bg-gray-400', 'cursor-not-allowed');
+        botaoFinalizar.classList.remove('bg-green-600', 'hover:bg-green-700');
+        botaoFinalizar.textContent = '🔒 Fechado para pedidos';
+      } else {
+        botaoFinalizar.disabled = false;
+        botaoFinalizar.classList.remove('bg-gray-400', 'cursor-not-allowed');
+        botaoFinalizar.classList.add('bg-green-600', 'hover:bg-green-700');
+        botaoFinalizar.textContent = '📱 Finalizar no WhatsApp';
+      }
+    }
+    
+
+
+    function showCategory(category) {
+      currentCategory = category;
+      
+      // Update tab styles
+      document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.classList.remove('bg-red-600', 'text-white');
+        tab.classList.add('bg-gray-300', 'text-gray-700');
+      });
+      
+      document.getElementById(`tab-${category}`).classList.remove('bg-gray-300', 'text-gray-700');
+      document.getElementById(`tab-${category}`).classList.add('bg-red-600', 'text-white');
+      
+      renderProducts(category);
+    }
+
+    function renderProducts(category) {
+      const grid = document.getElementById('products-grid');
+      const products = produtos[category];
+      
+      grid.innerHTML = products.map(product => `
+        <div class="bg-white rounded-lg shadow-md overflow-hidden card-hover">
+          <div class="h-48 overflow-hidden">
+            <img src="${product.imagem}" alt="${product.nome}" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2 text-red-800">${product.nome}</h3>
+            <p class="text-gray-600 mb-4 text-sm">${product.descricao}</p>
+            <div class="flex justify-between items-center">
+              <span class="text-2xl font-bold text-green-600">R$ ${product.preco.toFixed(2).replace('.', ',')}</span>
+              <button onclick="addToCart('${product.nome}', ${product.preco})" 
+                      class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addToCart(nome, preco) {
+      const existingItem = cart.find(item => item.nome === nome);
+      
+      if (existingItem) {
+        existingItem.quantidade++;
+      } else {
+        // Find the product image
+        let imagem = '';
+        for (const category in produtos) {
+          const product = produtos[category].find(p => p.nome === nome);
+          if (product) {
+            imagem = product.imagem;
+            break;
+          }
+        }
+        cart.push({ nome, preco, quantidade: 1, imagem });
+      }
+      
+      updateCartDisplay();
+      
+      // Show success feedback
+      const button = event.target;
+      const originalText = button.textContent;
+      button.textContent = 'Adicionado!';
+      button.classList.add('bg-green-600');
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.classList.remove('bg-green-600');
+      }, 1000);
+    }
+
+    function removeFromCart(nome) {
+      const itemIndex = cart.findIndex(item => item.nome === nome);
+      if (itemIndex > -1) {
+        if (cart[itemIndex].quantidade > 1) {
+          cart[itemIndex].quantidade--;
+        } else {
+          cart.splice(itemIndex, 1);
+        }
+      }
+      updateCartDisplay();
+    }
+
+    function updateCartDisplay() {
+      const cartCount = document.getElementById('cart-count');
+      const cartItems = document.getElementById('cart-items');
+      const cartTotal = document.getElementById('cart-total');
+      const cartSubtotal = document.getElementById('cart-subtotal');
+      const cartDeliveryFee = document.getElementById('cart-delivery-fee');
+      const cartFinalTotal = document.getElementById('cart-final-total');
+      const deliveryFeeSection = document.getElementById('delivery-fee-section');
+      
+      const totalItems = cart.reduce((sum, item) => sum + item.quantidade, 0);
+      const subtotal = cart.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+      const finalTotal = subtotal + deliveryFee;
+      
+      if (totalItems > 0) {
+        cartCount.textContent = totalItems;
+        cartCount.classList.remove('hidden');
+      } else {
+        cartCount.classList.add('hidden');
+      }
+      
+      cartItems.innerHTML = cart.length === 0 ? 
+        '<p class="text-gray-500 text-center py-4">Seu carrinho está vazio</p>' :
+        cart.map(item => `
+          <div class="flex items-center bg-gray-50 p-3 rounded gap-3">
+            <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+              <img src="${item.imagem}" alt="${item.nome}" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1">
+              <h4 class="font-semibold text-sm">${item.nome}</h4>
+              <p class="text-sm text-gray-600">R$ ${item.preco.toFixed(2).replace('.', ',')} x ${item.quantidade}</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="removeFromCart('${item.nome}')" class="bg-red-500 text-white w-6 h-6 rounded-full text-sm hover:bg-red-600">-</button>
+              <span class="w-8 text-center text-sm">${item.quantidade}</span>
+              <button onclick="addToCart('${item.nome}', ${item.preco})" class="bg-green-500 text-white w-6 h-6 rounded-full text-sm hover:bg-green-600">+</button>
+            </div>
+          </div>
+        `).join('');
+      
+      // Atualizar totais
+      cartSubtotal.textContent = subtotal.toFixed(2).replace('.', ',');
+      cartTotal.textContent = subtotal.toFixed(2).replace('.', ','); // Manter compatibilidade
+      cartFinalTotal.textContent = finalTotal.toFixed(2).replace('.', ',');
+      
+      // Mostrar/ocultar taxa de entrega
+      if (deliveryFee > 0) {
+        cartDeliveryFee.textContent = deliveryFee.toFixed(2).replace('.', ',');
+        deliveryFeeSection.classList.remove('hidden');
+      } else {
+        deliveryFeeSection.classList.add('hidden');
+      }
+    }
+
+    function toggleCart() {
+      const modal = document.getElementById('cart-modal');
+      modal.classList.toggle('hidden');
+    }
+
+    // Função para gerar ID único do pedido
+    function gerarIdPedido() {
+      const agora = new Date();
+      const ano = agora.getFullYear().toString().slice(-2);
+      const mes = (agora.getMonth() + 1).toString().padStart(2, '0');
+      const dia = agora.getDate().toString().padStart(2, '0');
+      const hora = agora.getHours().toString().padStart(2, '0');
+      const minuto = agora.getMinutes().toString().padStart(2, '0');
+      const segundo = agora.getSeconds().toString().padStart(2, '0');
+      
+      return `JB${ano}${mes}${dia}${hora}${minuto}${segundo}`;
+    }
+
+    // Google Sheets integration
+    async function salvarPedidoGoogleSheets(dadosPedido) {
+      // COLE AQUI A URL DO SEU GOOGLE APPS SCRIPT
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzolkmFb36zo4DJ7X67pGNYlW3bWbPl44YQlZx4SWzjIy-F2Y8nkbmcVRg_1zmM86Yb6Q/exec';
+      
+      try {
+        // Preparar dados no formato correto
+        const dadosFormatados = {
+          id: dadosPedido.id,
+          timestamp: dadosPedido.timestamp,
+          cliente: dadosPedido.cliente,
+          telefone: dadosPedido.telefone,
+          tipoEntrega: dadosPedido.tipoEntrega,
+          endereco: dadosPedido.endereco,
+          observacoes: dadosPedido.observacoes,
+          itens: dadosPedido.itens.map(item => `${item.quantidade}x ${item.nome} - R$ ${item.subtotal.toFixed(2).replace('.', ',')}`).join('; '),
+          total: dadosPedido.total.toFixed(2).replace('.', ','),
+          pagamento: dadosPedido.pagamento,
+          troco: dadosPedido.troco || '',
+          status: dadosPedido.status
+        };
+        
+        // Log para debug - veja no console do navegador (F12)
+        console.log('Dados sendo enviados:', dadosFormatados);
+        
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain',
+          },
+          body: JSON.stringify(dadosFormatados)
+        });
+        
+        console.log('Resposta do servidor:', response);
+        console.log('Pedido salvo no Google Sheets com sucesso!');
+        return true;
+      } catch (error) {
+        console.error('Erro ao salvar no Google Sheets:', error);
+        return false;
+      }
+    }
+
+    function finalizarPedido() {
+      if (cart.length === 0) {
+        alert('Seu carrinho está vazio!');
+        return;
+      }
+      
+      // Validate customer information
+      const nome = document.getElementById('customer-name').value.trim();
+      const telefone = document.getElementById('customer-phone').value.trim();
+      const tipoEntrega = document.getElementById('delivery-type').value;
+      const endereco = document.getElementById('customer-address').value.trim();
+      const observacoes = document.getElementById('customer-notes').value.trim();
+      const pagamento = document.getElementById('payment-method').value;
+      
+      if (!nome) {
+        alert('Por favor, digite seu nome completo!');
+        document.getElementById('customer-name').focus();
+        return;
+      }
+      
+      if (!telefone) {
+        alert('Por favor, digite seu telefone!');
+        document.getElementById('customer-phone').focus();
+        return;
+      }
+      
+      if (!tipoEntrega) {
+        alert('Por favor, selecione o tipo de entrega!');
+        document.getElementById('delivery-type').focus();
+        return;
+      }
+      
+      if (tipoEntrega === 'entrega' && !endereco) {
+        alert('Por favor, digite seu endereço completo para entrega!');
+        document.getElementById('customer-address').focus();
+        return;
+      }
+      
+      if (!pagamento) {
+        alert('Por favor, selecione a forma de pagamento!');
+        document.getElementById('payment-method').focus();
+        return;
+      }
+      
+      const total = cart.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+      const itens = cart.map(item => `${item.quantidade}x ${item.nome} - R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}`).join('\n');
+      
+      // Generate unique order ID
+      const idPedido = gerarIdPedido();
+      
+      // Payment method text
+      const pagamentoTexto = {
+        'dinheiro': '💵 Dinheiro',
+        'pix': '📱 PIX',
+        'cartao-debito': '💳 Cartão de Débito',
+        'cartao-credito': '💳 Cartão de Crédito'
+      };
+      
+      // Delivery type text
+      const tipoEntregaTexto = {
+        'entrega': '🏠 Entrega em casa',
+        'retirada': '🏪 Retirada no local'
+      };
+      
+      // Prepare data for Google Sheets
+      const dadosPedido = {
+        id: idPedido,
+        timestamp: new Date().toLocaleString('pt-BR'),
+        cliente: nome,
+        telefone: telefone,
+        tipoEntrega: tipoEntregaTexto[tipoEntrega],
+        endereco: tipoEntrega === 'entrega' ? endereco : 'Retirada no local',
+        observacoes: observacoes || 'Nenhuma',
+        itens: cart.map(item => ({
+          nome: item.nome,
+          quantidade: item.quantidade,
+          preco: item.preco,
+          subtotal: item.preco * item.quantidade
+        })),
+        total: total,
+        pagamento: pagamentoTexto[pagamento],
+        troco: pagamento === 'dinheiro' ? document.getElementById('troco-value').value : null,
+        status: 'Novo Pedido'
+      };
+      
+      // Save to Google Sheets
+      salvarPedidoGoogleSheets(dadosPedido);
+      
+      let mensagem = `🍔 *Pedido Joy Burger*\n\n`;
+      mensagem += `🆔 *ID do Pedido:* ${idPedido}\n`;
+      mensagem += `👤 *Cliente:* ${nome}\n`;
+      mensagem += `📱 *Telefone:* ${telefone}\n`;
+      mensagem += `🚚 *Entrega:* ${tipoEntregaTexto[tipoEntrega]}\n`;
+      
+      if (tipoEntrega === 'entrega') {
+        mensagem += `📍 *Endereço:* ${endereco}\n`;
+      }
+      
+      if (observacoes) {
+        mensagem += `📝 *Observações:* ${observacoes}\n`;
+      }
+      
+      mensagem += `\n📋 *Itens do pedido:*\n${itens}\n\n`;
+      mensagem += `💰 *Total: R$ ${total.toFixed(2).replace('.', ',')}*\n`;
+      mensagem += `💳 *Pagamento:* ${pagamentoTexto[pagamento]}`;
+      
+      // Add change information if payment is cash
+      if (pagamento === 'dinheiro') {
+        const troco = document.getElementById('troco-value').value;
+        if (troco && parseFloat(troco) > total) {
+          const valorTroco = parseFloat(troco) - total;
+          mensagem += `\n💰 *Troco para:* R$ ${parseFloat(troco).toFixed(2).replace('.', ',')}`;
+          mensagem += `\n💰 *Troco:* R$ ${valorTroco.toFixed(2).replace('.', ',')}`;
+        }
+      }
+      
+      const whatsappUrl = `https://wa.me/+5598991038276?text=${encodeURIComponent(mensagem)}`;
+      window.open(whatsappUrl, '_blank');
+      
+      // Clear cart and form after successful order
+      cart = [];
+      updateCartDisplay();
+      document.getElementById('customer-name').value = '';
+      document.getElementById('customer-phone').value = '';
+      document.getElementById('delivery-type').value = '';
+      document.getElementById('customer-address').value = '';
+      document.getElementById('customer-notes').value = '';
+      document.getElementById('payment-method').value = '';
+      document.getElementById('troco-value').value = '';
+      toggleCart();
+    }
+
+    // Close cart when clicking outside
+    document.getElementById('cart-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        toggleCart();
+      }
+    });
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      showCategory('hamburgueres');
+      
+      // Inicializar sistema de horários
+      atualizarStatusFuncionamento();
+      
+      // Atualizar status a cada minuto
+      setInterval(atualizarStatusFuncionamento, 60000);
+      
+      // Add event listener for payment method change
+      document.getElementById('payment-method').addEventListener('change', function() {
+        const trocoSection = document.getElementById('troco-section');
+        if (this.value === 'dinheiro') {
+          trocoSection.classList.remove('hidden');
+        } else {
+          trocoSection.classList.add('hidden');
+          document.getElementById('troco-value').value = '';
+        }
+      });
+      
+      // Add event listener for delivery type change
+      document.getElementById('delivery-type').addEventListener('change', function() {
+        const addressSection = document.getElementById('address-section');
+        const pickupLocation = document.getElementById('pickup-location');
+        const addressField = document.getElementById('customer-address');
+        const deliveryInfo = document.getElementById('delivery-info');
+        
+        if (this.value === 'retirada') {
+          addressSection.classList.add('hidden');
+          pickupLocation.classList.remove('hidden');
+          // Resetar taxa de entrega
+          deliveryFee = 0;
+          updateCartDisplay();
+        } else if (this.value === 'entrega') {
+          addressSection.classList.remove('hidden');
+          pickupLocation.classList.add('hidden');
+          // Aplicar taxa fixa de entrega
+          deliveryFee = RESTAURANT_CONFIG.entrega.taxaFixa;
+          updateCartDisplay();
+        } else {
+          addressSection.classList.add('hidden');
+          pickupLocation.classList.add('hidden');
+          deliveryFee = 0;
+          updateCartDisplay();
+        }
+      });
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96d405f3d116f63a',t:'MTc1NDg3NjQwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
