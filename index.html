@@ -170,11 +170,16 @@
                 <div class="text-center">
                   <div class="text-blue-700 font-semibold mb-2">🚚 Informações de Entrega</div>
                   <div class="space-y-1 text-sm text-blue-600">
-                    <div>💰 Taxa de entrega: <span class="font-semibold">R$ 5,00</span></div>
+                    <div>💰 Taxa de entrega - Santa Luzia: <span class="font-semibold">R$ 3,00</span></div>
+                    <div>💰 Taxa de entrega - Alto do abel: <span class="font-semibold">R$ 3,00</span></div>
+                    <div>💰 Taxa de entrega - Paruá: <span class="font-semibold">R$ 3,00</span></div>
+                    <div>💰 Taxa de entrega - Bairro novo: <span class="font-semibold">R$ 3,00</span></div>
+                    <div>💰 Taxa de entrega - Três irmãos: <span class="font-semibold">R$ 4,00</span></div>
+                    <div>💰 Taxa de entrega - Monte dourado: <span class="font-semibold">R$ 4,00</span></div>
+                    <div>💰 Taxa de entrega - Monte alegre: <span class="font-semibold">R$ 15,00</span></div>
+                    <div>💰 Taxa de entrega - Cizino: <span class="font-semibold">R$ 15,00</span></div>
+                    <div>💰 Taxa de entrega - Piçarreira: <span class="font-semibold">R$ 5,00</span></div>
                     <div>⏱️ Tempo estimado: <span class="font-semibold">30-45 min</span></div>
-                    <div class="text-xs text-gray-500 mt-2">
-                      Taxa fixa para toda Santa Luzia do Paruá
-                    </div>
                   </div>
                 </div>
               </div>
@@ -295,7 +300,7 @@
         </div>
         <div class="bg-red-700 p-6 rounded-lg">
           <h3 class="text-xl font-semibold mb-3">📍 Localização</h3>
-          <p class="mb-2">Santa Luzia do Paruá - MA</p>
+          <p class="mb-2">Paruá - Rua do cordeiro 54</p>
           <p class="mb-2">CEP: 65272-000</p>
           <p class="text-orange-200">🕐 Funcionamento: 19h às 23h</p>
         </div>
@@ -313,24 +318,24 @@
     // Product data
     const produtos = {
       hamburgueres: [
-        { nome: "GOLD SMASH", preco: 15.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO, QUEIJO CHEDDAR.", imagem: "src/imagens/gold-smash.jpg" },
-        { nome: "JOY CARAMELIZADA", preco: 19.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO, QUEIJO MUSSARELA, CEBOLA CARAMELIZADA.", imagem: "src/imagens/joy-caramelizada.jpg" },
-        { nome: "JOY BACON", preco: 19.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO, QUEIJO CHEDDAR, BACON.", imagem: "src/imagens/joy-bacon.jpg" },
-        { nome: "JOY SALAD", preco: 19.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO, QUEIJO MUSSARELA, ALFACE AMERICANA, E TOMATE, CEBOLA ROXA GRELHADA.", imagem: "src/imagens/joy-salad.jpg" },
-        { nome: "JOY CALABRESA", preco: 19.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO,, QUEIJO CHEDDAR, CALABRESA.", imagem: "src/imagens/joy-calabresa.jpg" },
-        { nome: "KING SMASH", preco: 27.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, DOID BLENDS, QUEIJO CHEDDAR, CEBOLA ROXA GRELHADA, BACON.", imagem: "src/imagens/king-smash.jpg" }
+        { nome: "GOLD SMASH", preco: 15.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO, QUEIJO CHEDDAR.", imagem: "src/imagens/gold-smash.png" },
+        { nome: "JOY CARAMELIZADA", preco: 19.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO, QUEIJO MUSSARELA, CEBOLA CARAMELIZADA.", imagem: "src/imagens/joy-caramelizada.png" },
+        { nome: "JOY BACON", preco: 19.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO, QUEIJO CHEDDAR, BACON.", imagem: "src/imagens/joy-bacon.png" },
+        { nome: "JOY SALAD", preco: 19.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO, QUEIJO MUSSARELA, ALFACE AMERICANA, E TOMATE, CEBOLA ROXA GRELHADA.", imagem: "src/imagens/joy-salad.png" },
+        { nome: "JOY CALABRESA", preco: 19.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, BLEND BOVINO,, QUEIJO CHEDDAR, CALABRESA.", imagem: "src/imagens/joy-calabresa.png" },
+        { nome: "KING SMASH", preco: 27.00, descricao: "PÃO DE LEITE, MOLHO ESPECIAL, DOID BLENDS, QUEIJO CHEDDAR, CEBOLA ROXA GRELHADA, BACON.", imagem: "src/imagens/king-smash.png" }
       ],
       hotdogs: [
         { nome: "HOT SIMPLES", preco: 16.00, descricao: "PÃO, SALSICHA GRELHADA, MOLHO À BOLONHESA, BATATA PALHA.", imagem: "src/imagens/hot-dog.png" },
-        { nome: "HOT GOLD", preco: 20.00, descricao: "PÃO DE LEITE, DUAS SALSICHAS GRELHADAS, MOLHO À BOLONHESA, MOLHO CHEDDAR, BACON.", imagem: "src/imagens/hot-gold.jpg" },
+        { nome: "HOT GOLD", preco: 20.00, descricao: "PÃO DE LEITE, DUAS SALSICHAS GRELHADAS, MOLHO À BOLONHESA, MOLHO CHEDDAR, BACON.", imagem: "src/imagens/hot-gold.png" },
         { nome: "HOT CARAMELIZADA", preco: 20.00, descricao: "PÃO DE LEITE, DUAS SALSICHAS GRELHADAS, MOLHO À BOLONHESA, CEBOLA CARAMELIZADA, BATALHA PALHA.", imagem: "src/imagens/hot-dog.png" },
-        { nome: "HOT ONION", preco: 20.00, descricao: "PÃO DE LEITE,  DUAS SALSICHAS, MOLHO À BOLONHESA, CEBOLA ROXA GRELHADA, MAIONESE DE ALHO.", imagem: "src/imagens/hot-onion.jpg" },
+        { nome: "HOT ONION", preco: 20.00, descricao: "PÃO DE LEITE,  DUAS SALSICHAS, MOLHO À BOLONHESA, CEBOLA ROXA GRELHADA, MAIONESE DE ALHO.", imagem: "src/imagens/hot-onion.png" },
         { nome: "HOT CALABRESA", preco: 20.00, descricao: "PÃO DE LEITE, DUAS SALSICHAS GRELHADAS, MOLHO À BOLONHESA,, CALABRESA, BATATA PALHA.", imagem: "src/imagens/hot-dog.png" }
       ],
       massas: [
-        { nome: "MASSA SIMPLES", preco: 20.00, descricao: "MACARRÃO TALHARIM, MOLHO À BOLONHESA, QUEIJO MUSSARELA, SALSICHA GRELHADA.", imagem: "src/imagens/massa.jpg" },
-        { nome: "MASSA BACON", preco: 20.00, descricao: "MACARRÃO TALHARIM, MOLHO À BOLONHESA, QUEIJO MUSSARELA, BACON.", imagem: "src/imagens/massa.jpg" },
-        { nome: "MASSA CALABRESA", preco: 20.00, descricao: "MACARRÃO TALHARIM, MOLHO À BOLONHESA, QUEIJO MUSSARELA, CALABRESA.", imagem: "src/imagens/massa.jpg" }
+        { nome: "MASSA SIMPLES", preco: 20.00, descricao: "MACARRÃO TALHARIM, MOLHO À BOLONHESA, QUEIJO MUSSARELA, SALSICHA GRELHADA.", imagem: "src/imagens/massa.png" },
+        { nome: "MASSA BACON", preco: 20.00, descricao: "MACARRÃO TALHARIM, MOLHO À BOLONHESA, QUEIJO MUSSARELA, BACON.", imagem: "src/imagens/massa.png" },
+        { nome: "MASSA CALABRESA", preco: 20.00, descricao: "MACARRÃO TALHARIM, MOLHO À BOLONHESA, QUEIJO MUSSARELA, CALABRESA.", imagem: "src/imagens/massa.png" }
       ],
       bebidas: [
         { nome: "REFRIGERANTE LATA", preco: 5.00, descricao: "350ML, CONSULTAR SABORES", imagem: "src/imagens/refrigerante-350ml.png" },
@@ -516,8 +521,8 @@
       const products = produtos[category];
       
       grid.innerHTML = products.map(product => `
-        <div class="bg-white rounded-lg shadow-md overflow-hidden card-hover">
-          <div class="h-48 overflow-hidden">
+        <div class="bg-gray-200 rounded-lg shadow-md overflow-hidden card-hover">
+          <div class="h-48 overflow-hidden image-size">
             <img src="${product.imagem}" alt="${product.nome}" class="w-full h-full object-cover">
           </div>
           <div class="p-6">
